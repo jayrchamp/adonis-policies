@@ -1,0 +1,53 @@
+{
+  "name": "@jayrchamp/adonis-policies",
+  "version": "0.0.8",
+  "main": "index.js",
+  "author": "jayrchamp <champjr@me.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jayrchamp/adonis-policies"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "node japaFile.js",
+    "test:nyc": "nyc node japaFile.js",
+    "npm:publish": "npm publish --access public",
+    "mah": "./node_modules/.bin/mah"
+  },
+  "peerDependencies": {
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/framework": "^5.0.9"
+  },
+  "dependencies": {
+    "@adonisjs/generic-exceptions": "^2.0.1",
+    "@adonisjs/validator": "^5.0.6",
+    "indicative": "^5.0.8",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@adonisjs/framework": "^5.0.9",
+    "@adonisjs/ignitor": "^2.0.6",
+    "@adonisjs/lucid": "^6.2.1",
+    "@adonisjs/mrm-preset": "^1.0.14",
+    "@adonisjs/sink": "^1.0.17",
+    "@jayrchamp/mah-scripts": "^1.1.9",
+    "clone": "^2.1.2",
+    "coveralls": "^3.0.2",
+    "japa": "^2.0.5",
+    "japa-cli": "^1.0.1",
+    "macroable": "^1.0.0",
+    "nanoid": "^3.1.20",
+    "nyc": "^13.1.0",
+    "qs": "^6.9.6",
+    "standard": "^12.0.1",
+    "supertest": "^6.1.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "nyc": {
+    "exclude": [
+      "test"
+    ]
+  }
+}
