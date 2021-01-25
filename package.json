@@ -49,5 +49,8 @@
     "exclude": [
       "test"
     ]
+  },
+  "mah": {
+    "repo": "jayrchamp/adonis-policies"
   }
 }
