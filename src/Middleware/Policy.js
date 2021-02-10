@@ -280,15 +280,15 @@ class PolicyMiddleware {
     }
 
     /**
-     * Everything is okay continue to controller
-     */
-    await next()
-
-    /**
      * Validates that request data (request.all()) contains
      * only authorized fields and fields values.
      */
     await this._runPermittedQueryAuthorization(policyInstance, ctx)
+
+    /**
+     * Everything is okay continue to controller
+     */
+    await next()
 
     /**
      * Filters response content to return only the properties the end-user is allowed to see

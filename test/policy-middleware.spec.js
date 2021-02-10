@@ -822,4 +822,67 @@ test.group('Policy Middleware', (group) => {
 
     server.close()
   })
+
+  test
+  // .skip
+  ('policy.permittedQuery should stop the request before entering the controller', async (assert) => {
+    const Server = use('Adonis/Src/Server')
+    const Route = use('Adonis/Src/Route')
+    const routePath = `/${nanoid.nanoid()}`
+
+    const { rule } = use('@jayrchamp/Policy/Validator')
+
+    class FooBarPolicy {
+      permittedQuery () {
+        return {
+          'foo.bar.*': [
+            rule('string')
+          ]
+        }
+      }
+    }
+
+    const fooBarPolicyPath = 'App/Policies/Foo/BarPolicy'
+    ioc.fake(fooBarPolicyPath, () => new FooBarPolicy())
+
+    let hasPassedThroughController = false
+
+    Route
+      .get(routePath, ({ request, response }) => {
+        hasPassedThroughController = true
+        response.ok()
+      })
+      .policy(fooBarPolicyPath)
+
+    const server = Server.listen(HOST, PORT)
+    const response = await supertest(server)
+      .get(routePath)
+      .accept('json')
+      .query(qs.stringify({
+        foo: {
+          bar: [
+            {
+              baz: 'quux'
+            }
+          ]
+        }
+      }))
+
+    // console.log('response.status', response.status);
+    // console.log('response.body', response.body);
+
+    assert.equal(hasPassedThroughController, false, 'expect the request to have been stopped before passing through the controller')
+    assert.equal(response.status, 403)
+    assert.deepEqual(response.body, {
+      messages: [
+        {
+          field: 'foo.bar.0',
+          message: 'Not authorized value on query field foo.bar.0',
+          validation: 'string'
+        }
+      ]
+    })
+
+    server.close()
+  })
 })
