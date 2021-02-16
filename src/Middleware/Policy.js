@@ -263,6 +263,8 @@ class PolicyMiddleware {
     debug( 'handle policyInstance', policyInstance )
     policyInstance.ctx = ctx
 
+    // TODO Route validator should run here
+
     /**
      * Authorize the request. This method should return true to
      * authorize the request.
