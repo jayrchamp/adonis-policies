@@ -51,7 +51,7 @@ module.exports = async () => {
     return require('../../node_modules/@adonisjs/framework/src/Exception/BaseHandler')
   })
   ioc.alias('Adonis/Exceptions/BaseExceptionHandler', 'BaseExceptionHandler')
-  
+
   /**
    * Register Helpers
    */
@@ -93,8 +93,8 @@ module.exports = async () => {
   /**
    * Register Validator
    */
-  ioc.bind('Adonis/Addons/Validator', () => require('../../node_modules/@adonisjs/validator/src/Validator'))
-  ioc.alias('Adonis/Addons/Validator', 'Validator')
+  // ioc.bind('Adonis/Addons/Validator', () => require('../../node_modules/@adonisjs/validator/src/Validator'))
+  // ioc.alias('Adonis/Addons/Validator', 'Validator')
 
   /**
    * Register Server
@@ -148,7 +148,10 @@ module.exports = async () => {
   })
 
   await registrar.providers([
-    path.join(__dirname, '../../providers/PolicyProvider')
+    path.join(__dirname, '../../providers/PolicyProvider'),
+    path.join(__dirname, '../../node_modules/@adonisjs/validator/providers/ValidatorProvider')
+
+    // require('../../node_modules/@adonisjs/validator/src/Validator')
   ])
   .registerAndBoot()
 }

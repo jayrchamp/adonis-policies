@@ -885,4 +885,77 @@ test.group('Policy Middleware', (group) => {
 
     server.close()
   })
+
+  test
+  // .skip
+  ('policy class should run after validator', async (assert) => {
+    const Server = use('Adonis/Src/Server')
+    const Route = use('Adonis/Src/Route')
+    const routePath = `/${nanoid.nanoid()}`
+
+    const { rule } = use('@jayrchamp/Policy/Validator')
+
+    let hasPassedThroughPolicy = false
+
+    class FooBarPolicy {
+      permittedQuery () {
+        hasPassedThroughPolicy = true
+        return {
+          'foo.bar.*': [
+            rule('string')
+          ]
+        }
+      }
+    }
+
+    const fooBarPolicyPath = 'App/Policies/Foo/BarPolicy'
+    ioc.fake(fooBarPolicyPath, () => new FooBarPolicy())
+
+    class FooBarValidator {
+      get rules () {
+        return {
+          'foo.bar.*': [
+            rule('string')
+          ]
+        }
+      }
+    }
+
+    const fooBarValidatorPath = 'App/Validators/Foo/BarValidator'
+    ioc.fake(fooBarValidatorPath, () => new FooBarValidator())
+
+    Route
+      .get(routePath, ({ request, response }) => response.ok())
+      .policy(fooBarPolicyPath)
+      .validator(fooBarValidatorPath)
+
+    const server = Server.listen(HOST, PORT)
+    const response = await supertest(server)
+      .get(routePath)
+      .accept('json')
+      .query(qs.stringify({
+        foo: {
+          bar: [
+            {
+              baz: 'quux'
+            }
+          ]
+        }
+      }))
+
+    // console.log('response.status', response.status);
+    console.log('response.body', response.body);
+
+    assert.equal(hasPassedThroughPolicy, false, 'expect policy to run after validator and prevent policy to run if validator fails')
+    assert.equal(response.status, 400)
+    assert.deepEqual(response.body, [
+      {
+        message: 'string validation failed on foo.bar.0',
+        field: 'foo.bar.0',
+        validation: 'string'
+      }
+    ])
+
+    server.close()
+  })
 })
