@@ -9,6 +9,17 @@ const setupApp = require('./setup')
 const nanoid = require('nanoid')
 const qs = require('qs')
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+function randomIntFromInterval(min, max) { // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+async function getRandomNumberWithLatency (min = 1, max = 2, ms = 1000) {
+  await sleep(ms)
+  return randomIntFromInterval(1, 2)
+}
+
 
 const HOST = 'localhost'
 const PORT = 3333
@@ -28,7 +39,7 @@ test.group('Policy Middleware', (group) => {
    * if left unhandled or explicitly return false a generic response will end
    */
   test
-  // .skip
+  .skip
   ('make generic response when authorize returns false when leaves the request hanging', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -62,7 +73,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('should keep all fields on response content if policy.permittedFields method is not defined on policy class', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -94,7 +105,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('response content should keep only contains the fields return by policy.permittedFields method', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -137,7 +148,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedFields support object dot notation filtering', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -187,7 +198,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedFields support array of object dot notation filtering', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -248,7 +259,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedFields support deep array of object dot notation filtering', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -341,7 +352,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields] should return 200 on successful query fields authorization', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -389,7 +400,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields] should support first level of fields authorization w/ normal query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -438,7 +449,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields] should support first level of fields authorization w/ dot notation query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -488,7 +499,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields] should support deep level of fields authorization w/ dot notation query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -542,7 +553,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields.values] should support multiple field value validations', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -606,7 +617,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields.values] should support first level of field value authorization w/ normal query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -655,7 +666,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields.values] should support deep level of field value authorization w/ dot notation query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -711,7 +722,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery [fields.values] should support array field value authorization w/ dot notation query data', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -767,7 +778,7 @@ test.group('Policy Middleware', (group) => {
    *
    */
   test
-  // .skip
+  .skip
   ('policy.permittedQuery should also work using rule method from @jayrchamp/Policy/Validator', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -824,7 +835,7 @@ test.group('Policy Middleware', (group) => {
   })
 
   test
-  // .skip
+  .skip
   ('policy.permittedQuery should stop the request before entering the controller', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -887,7 +898,7 @@ test.group('Policy Middleware', (group) => {
   })
 
   test
-  // .skip
+  .skip
   ('policy class should run after validator', async (assert) => {
     const Server = use('Adonis/Src/Server')
     const Route = use('Adonis/Src/Route')
@@ -958,4 +969,181 @@ test.group('Policy Middleware', (group) => {
 
     server.close()
   })
+
+  test
+  .skip
+  ('...', async (assert) => {
+    const Server = use('Adonis/Src/Server')
+    const Route = use('Adonis/Src/Route')
+    const routePath = `/${nanoid.nanoid()}`
+
+    const { rule } = use('@jayrchamp/Policy/Validator')
+    class FooBarPolicy {
+
+      permittedFields () {
+
+
+        return []
+      }
+    }
+
+    const fooBarPolicyPath = 'App/Policies/Foo/BarPolicy'
+    ioc.fake(fooBarPolicyPath, () => new FooBarPolicy())
+
+    // class FooBarValidator {
+      //   get rules () {
+      //     return {
+      //       'foo.bar.*': [
+      //         rule('string')
+      //       ]
+      //     }
+      //   }
+    // }
+    // const fooBarValidatorPath = 'App/Validators/Foo/BarValidator'
+    // ioc.fake(fooBarValidatorPath, () => new FooBarValidator())
+
+    Route
+      .get(routePath, ({ request, response }) => {
+        const Model = use('Model')
+        class User extends Model {}
+        const user = new User()
+        user.firstname = 'John'
+        user.lastname = 'Doe'
+        return response.ok(user)
+      })
+      .policy(fooBarPolicyPath)
+      // .validator(fooBarValidatorPath)
+
+    const server = Server.listen(HOST, PORT)
+    const response = await supertest(server)
+      .get(routePath)
+      .accept('json')
+      .query(qs.stringify({
+        foo: {
+          bar: [
+            {
+              baz: 'quux'
+            }
+          ]
+        }
+      }))
+
+    // console.log('response.status', response.status);
+    console.log('response.body', response.body);
+
+
+    server.close()
+  })
+
+  test
+  // .skip
+  ('...', async (assert) => {
+    const Server = use('Adonis/Src/Server')
+    const Route = use('Adonis/Src/Route')
+    const routePath = `/${nanoid.nanoid()}`
+
+
+
+
+
+    const Model = use('Model')
+    class User extends Model {
+      async permittedFields (policy) {
+
+        if (userId !== this.id) {
+          this.$hidden = _.concat(this.$hidden, ['lastname'])
+        }
+
+
+        console.log('\n')
+        console.log('RandomUserId', userId)
+        console.log('user.permittedFields', this.id);
+        console.log('\n')
+      }
+    }
+
+    class Post extends Model {
+      async permittedFields (ctx) {
+        console.log('post.permittedFields', this.id);
+      }
+    }
+
+
+    const { rule } = use('@jayrchamp/Policy/Validator')
+    class FooBarPolicy {
+
+      permittedFields () {
+        return []
+      }
+    }
+
+    const fooBarPolicyPath = 'App/Policies/Foo/BarPolicy'
+    ioc.fake(fooBarPolicyPath, () => new FooBarPolicy())
+
+    // class FooBarValidator {
+      //   get rules () {
+      //     return {
+      //       'foo.bar.*': [
+      //         rule('string')
+      //       ]
+      //     }
+      //   }
+    // }
+    // const fooBarValidatorPath = 'App/Validators/Foo/BarValidator'
+    // ioc.fake(fooBarValidatorPath, () => new FooBarValidator())
+
+    Route
+      .get(routePath, async ({ request, response }) => {
+        const VanillaSerializer = require('@adonisjs/lucid/src/Lucid/Serializers/Vanilla')
+        const user1 = new User()
+        user1.id = 1
+        user1.firstname = 'John'
+        user1.lastname = 'Doe'
+
+        const user2 = new User()
+        user2.id = 2
+        user2.firstname = 'John'
+        user2.lastname = 'Doe'
+
+        const post1 = new Post()
+        post1.id = 1
+        post1.title = 'Mamamia'
+
+
+        const users =  new VanillaSerializer([
+          user1,
+          user2
+        ], null, false)
+
+
+        user2.$relations['post'] = post1
+
+
+
+
+        return response.ok(users)
+      })
+      .policy(fooBarPolicyPath)
+      // .validator(fooBarValidatorPath)
+
+    const server = Server.listen(HOST, PORT)
+    const response = await supertest(server)
+      .get(routePath)
+      .accept('json')
+      .query(qs.stringify({
+        foo: {
+          bar: [
+            {
+              baz: 'quux'
+            }
+          ]
+        }
+      }))
+
+    // console.log('response.status', response.status);
+    console.log('response.body', response.body);
+
+
+    server.close()
+  }).timeout(0)
 })

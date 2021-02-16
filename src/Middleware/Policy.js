@@ -78,7 +78,13 @@ class PolicyMiddleware {
     const permittedFields = await this._permittedFields(policyInstance)
     debug('permittedFields', permittedFields)
     if (typeof permittedFields === 'boolean' && permittedFields) return
-    ctx.response.lazyBody.content = await this._filterContentFields(permittedFields, ctx.response.lazyBody.content)
+     const test = await this._filterContentFields(ctx.response.lazyBody.content, policyInstance, ctx)
+
+    //  console.log('\n')
+    //  console.log( test )
+    //  console.log('\n')
+
+    //  ctx.response.lazyBody.content = test
   }
 
   /**
@@ -188,6 +194,31 @@ class PolicyMiddleware {
     await this._verifyPermittedQueryFieldsValue(permittedQuery, data)
   }
 
+  // async callPermittedQuery (modelInstance) {
+    //   if (typeof modelInstance.permittedFields === 'function') {
+    //     await modelInstance.permittedFields(ctx)
+
+    //     _.each(modelInstance.$relations, (values, relation) => {
+    //       output[relation] = values && typeof (values.toJSON) === 'function' ? values.toJSON() : values
+    //     })
+    //   }
+  // }
+
+  async _run (modelInstance, policyInstance, ctx) {
+    if (typeof modelInstance.permittedFields === 'function') {
+      await modelInstance.permittedFields(policyInstance, ctx)
+
+      if (modelInstance.$relations && _.size(modelInstance.$relations) > 0) {
+        const promises = _.map(modelInstance.$relations, (values, relation) => {
+          return this._filterContentFields(values, policyInstance, ctx)
+        })
+
+        await Promise.all(promises)
+      }
+    }
+    return modelInstance
+  }
+
   /**
    * Filters the response content to to keep only
    * the permitted fields
@@ -201,22 +232,42 @@ class PolicyMiddleware {
    *
    * @private
    */
-  _filterContentFields (permittedFields, content) {
+  async _filterContentFields (content, policyInstance, ctx) {
+
+    // console.log('\n')
+    // console.log(
+    //   content
+    //  )
+    // console.log('\n')
+
     if (!content) {
-      return null
+      return Promise.resolve(null)
     }
 
-    if (content && typeof content.toJSON === 'function') {
-      content = content.toJSON()
-    }
-
-    if (content && content.data) {
-      const { data, ...rest } = content
-      return { ...rest, data: content.data.map(c => matchObjectToArray(c, permittedFields)) }
+    /**
+     * Serializer filled of instances
+     */
+    if (content.rows){
+      const promises = content.rows.map(c => this._run(c, policyInstance, ctx))
+      content.rows = await Promise.all(promises)
     } else {
-      return matchObjectToArray(content, permittedFields)
+      content = await this._run(content, policyInstance, ctx)
     }
+
+    return Promise.resolve(content)
   }
+
+  // toJSON () {
+  //   if (this.isOne) {
+  //     return this._getRowJSON(this.rows)
+  //   }
+
+  //   const data = this.rows.map(this._getRowJSON.bind(this))
+  //   if (this.pages) {
+  //     return _.merge({}, this.pages, { data })
+  //   }
+  //   return data
+  // }
 
   /**
    * Ends the response when it's pending and the end-user

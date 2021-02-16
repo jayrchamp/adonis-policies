@@ -149,7 +149,8 @@ module.exports = async () => {
 
   await registrar.providers([
     path.join(__dirname, '../../providers/PolicyProvider'),
-    path.join(__dirname, '../../node_modules/@adonisjs/validator/providers/ValidatorProvider')
+    path.join(__dirname, '../../node_modules/@adonisjs/validator/providers/ValidatorProvider'),
+    path.join(__dirname, '../../node_modules/@adonisjs/lucid/providers/LucidProvider')
 
     // require('../../node_modules/@adonisjs/validator/src/Validator')
   ])
