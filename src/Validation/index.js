@@ -107,7 +107,7 @@ class Validation {
       messages = this._errorMessages.map(v => {
         return {
           field: v.field,
-          message: `Not authorized value on query field ${v.field}`,
+          message: `Policy validation failed on query field ${v.field}`,
           validation: v.validation
         }
       })
