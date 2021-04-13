@@ -39,7 +39,7 @@ test.group('Policy Validator', (group) => {
     const validation = await PolicyValidator.validate({ email: '' }, { email: 'required' })
     assert.deepEqual(validation.messages(), [{
       field: 'email',
-      message: 'Not authorized value on query field email',
+      message: 'Policy validation failed on query field email',
       validation: 'required'
     }])
   })
@@ -56,12 +56,12 @@ test.group('Policy Validator', (group) => {
       {
         field: 'email',
         validation: 'required',
-        message: 'Not authorized value on query field email'
+        message: 'Policy validation failed on query field email'
       },
       {
         field: 'age',
         validation: 'required',
-        message: 'Not authorized value on query field age'
+        message: 'Policy validation failed on query field age'
       }
     ])
   })
@@ -76,14 +76,14 @@ test.group('Policy Validator', (group) => {
     const validation = await PolicyValidator.validate(
       { email: '' },
       { email: 'required', age: 'required' },
-      { 'email.required': 'Not authorized ... custom message' }
+      { 'email.required': 'Policy validation failed ... custom message' }
     )
 
     assert.deepEqual(validation.messages(), [
       {
         field: 'email',
         validation: 'required',
-        message: 'Not authorized ... custom message'
+        message: 'Policy validation failed ... custom message'
       }
     ])
   })
@@ -98,7 +98,7 @@ test.group('Policy Validator', (group) => {
     const validation = await PolicyValidator.validate(
       { email: '' },
       { email: 'required', age: 'required' },
-      { 'email.required': 'Not authorized ... custom message' },
+      { 'email.required': 'Policy validation failed ... custom message' },
       PolicyValidator.formatters.JsonApi
     )
 
@@ -107,7 +107,7 @@ test.group('Policy Validator', (group) => {
         {
           source: { pointer: 'email' },
           title: 'required',
-          detail: 'Not authorized ... custom message'
+          detail: 'Policy validation failed ... custom message'
         }
       ]
     })
