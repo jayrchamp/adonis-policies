@@ -588,12 +588,12 @@ test.group('Policy Middleware', (group) => {
       messages:  [
         {
           field: 'baz.foo.qux',
-          message: 'Not authorized value on query field baz.foo.qux',
+          message: 'Policy validation failed on query field baz.foo.qux',
           validation: 'in'
         },
         {
           field: 'foo.baz.qux',
-          message: 'Not authorized value on query field foo.baz.qux',
+          message: 'Policy validation failed on query field foo.baz.qux',
           validation: 'in'
         }
       ]
@@ -642,7 +642,7 @@ test.group('Policy Middleware', (group) => {
       messages: [
         {
           field: "qux",
-          message: "Not authorized value on query field qux",
+          message: "Policy validation failed on query field qux",
           validation: "in"
         }
       ]
@@ -698,7 +698,7 @@ test.group('Policy Middleware', (group) => {
       messages: [
         {
           field: 'foo.bar',
-          message: 'Not authorized value on query field foo.bar',
+          message: 'Policy validation failed on query field foo.bar',
           validation: 'object'
         }
       ]
@@ -754,7 +754,7 @@ test.group('Policy Middleware', (group) => {
       messages: [
         {
           field: 'foo.bar.0',
-          message: 'Not authorized value on query field foo.bar.0',
+          message: 'Policy validation failed on query field foo.bar.0',
           validation: 'string'
         }
       ]
@@ -814,7 +814,7 @@ test.group('Policy Middleware', (group) => {
       messages: [
         {
           field: 'foo.bar.0',
-          message: 'Not authorized value on query field foo.bar.0',
+          message: 'Policy validation failed on query field foo.bar.0',
           validation: 'string'
         }
       ]
@@ -877,7 +877,7 @@ test.group('Policy Middleware', (group) => {
       messages: [
         {
           field: 'foo.bar.0',
-          message: 'Not authorized value on query field foo.bar.0',
+          message: 'Policy validation failed on query field foo.bar.0',
           validation: 'string'
         }
       ]
