@@ -925,9 +925,9 @@ test.group('Policy Middleware', (group) => {
     ioc.fake(fooBarValidatorPath, () => new FooBarValidator())
 
     Route
-      .get(routePath, ({ request, response }) => response.ok())
-      .policy(fooBarPolicyPath)
+      .get(routePath, ({ response }) => response.ok())
       .validator(fooBarValidatorPath)
+      .policy(fooBarPolicyPath)
 
     const server = Server.listen(HOST, PORT)
     const response = await supertest(server)
@@ -944,9 +944,13 @@ test.group('Policy Middleware', (group) => {
       }))
 
     // console.log('response.status', response.status);
-    console.log('response.body', response.body);
+    // console.log('response.body', response.body);
 
-    assert.equal(hasPassedThroughPolicy, false, 'expect policy to run after validator and prevent policy to run if validator fails')
+    assert.equal(
+      hasPassedThroughPolicy,
+      false,
+      'expect policy to run after validator if declared before policy on the route handler and therefore prevent policy to run if validator fails'
+    )
     assert.equal(response.status, 400)
     assert.deepEqual(response.body, [
       {
