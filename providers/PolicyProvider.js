@@ -1,6 +1,7 @@
 'use strict'
 
 const { ServiceProvider, resolver } = require('@adonisjs/fold')
+const _ = require('lodash')
 
 class PolicyProvider extends ServiceProvider {
 
