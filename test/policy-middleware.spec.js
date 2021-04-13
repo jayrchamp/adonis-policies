@@ -962,4 +962,65 @@ test.group('Policy Middleware', (group) => {
 
     server.close()
   })
+
+  test
+  // .skip
+  ('it should work with Route.resource', async (assert) => {
+    const Server = use('Adonis/Src/Server')
+    const Route = use('Adonis/Src/Route')
+    const resource = `${nanoid.nanoid()}`
+    const routePath = `/${resource}`
+
+    class FooBarPolicy {
+      permittedFields () {
+        return [
+          'foo',
+          'baz.qux'
+        ]
+      }
+    }
+
+    const fooBarPolicyPath = 'App/Policies/Foo/BarPolicy'
+    ioc.fake(fooBarPolicyPath, () => new FooBarPolicy())
+
+    class FooBarController {
+      async index ({ request, response }) {
+        return response.ok({
+          foo: 'bar',
+          baz: {
+            qux: 'quux',
+            corge: 'grault'
+          }
+        })
+      }
+    }
+
+    const fooBarControllerPath = 'App/Controllers/Http/Foo/Bar/Controller'
+    ioc.fake(fooBarControllerPath, () => new FooBarController())
+
+    Route
+      .resource(resource, fooBarControllerPath)
+      .only(['index'])
+      .policy(new Map([
+        [['show'], [fooBarPolicyPath]]
+      ]))
+
+    const server = Server.listen(HOST, PORT)
+    const response = await supertest(server)
+      .get(routePath)
+      .accept('json')
+
+    // console.log('response.body', response.body);
+
+    assert.equal(response.status, 200)
+    assert.deepEqual(response.body, {
+      foo: 'bar',
+      baz: {
+        qux: 'quux',
+        corge: 'grault'
+      }
+    })
+
+    server.close()
+  })
 })
